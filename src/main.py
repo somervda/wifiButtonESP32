@@ -16,7 +16,8 @@ def connect():
     if not net_if.isconnected():
         print('connecting to network...')
         net_if.active(True)
-        net_if.connect('ssid', 'password')
+        net_if.connect(config.wifi_config['ssid'],
+                       config.wifi_config['password'])
         while not net_if.isconnected():
             print('.', end='')
             utime.sleep_ms(500)

@@ -7,10 +7,15 @@ import config
 
 
 def buttonPress(p):
-    print('pin change', p)
-    contentBytes = MicroWebCli.GETRequest(
-        'http://192.168.1.115:1880/red/', {'button': 'red'})
-    print(contentBytes)
+    global last_press
+    # Simple debounce - make sure at least 200ms has passed
+    #  since last time a button press action is performed
+    if utime.ticks_ms() - last_press > 200:
+        print('pin change', p, str(last_press))
+        contentBytes = MicroWebCli.GETRequest(
+            'http://192.168.1.115:1880/red/', {'button': 'red'})
+        print(contentBytes)
+        last_press = utime.ticks_ms()
 
 
 def connect():
@@ -28,5 +33,6 @@ def connect():
 net_if = network.WLAN(network.STA_IF)
 connect()
 
-p16 = Pin(16, Pin.IN)
+last_press = utime.ticks_ms()
+p16 = Pin(16, Pin.IN, Pin.PULL_UP)
 p16.irq(trigger=Pin.IRQ_FALLING, handler=buttonPress)

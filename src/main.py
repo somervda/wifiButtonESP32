@@ -3,12 +3,13 @@ from machine import Pin
 import network
 from microWebCli import MicroWebCli
 import utime
+import config
 
 
 def buttonPress(p):
     print('pin change', p)
     contentBytes = MicroWebCli.GETRequest(
-        'http://snas:1880/red/', {'button': 'red'})
+        'http://192.168.1.115:1880/red/', {'button': 'red'})
     print(contentBytes)
 
 
